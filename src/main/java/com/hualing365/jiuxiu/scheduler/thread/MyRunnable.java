@@ -135,7 +135,7 @@ public class MyRunnable implements Runnable {
 				String familyBadge = userObj.getString("familyBadge");
 				int os = userObj.getIntValue("os");
 				insert(uid, accountId, nickName, wealthlevel, headImage, familyBadge, os, 0);
-				System.out.println(prefix() + nickName+":上线了");
+				System.out.println(prefix() + nickName+"-"+uid+":上线了");
 			}
 			//如果uid已包含，则先删除，set中剩余的就是已经下线的
 			else{
@@ -186,10 +186,8 @@ public class MyRunnable implements Runnable {
 	 * 计算房间空号用户数
 	 */
 	public void handleBlankUser(int roomCount, int realCount, int adminCount, int robotCount){
-		if(roomCount > 0){
-			int count = (roomCount - realCount - realCount*50 - robotCount)/51;
-			updateBlankCount(roomCount, realCount, adminCount, robotCount, count);
-		}
+		int count = (roomCount - realCount - realCount*50 - robotCount)/51;
+		updateBlankCount(roomCount, realCount, adminCount, robotCount, count);
 	}
 	
 	/**
@@ -252,7 +250,7 @@ public class MyRunnable implements Runnable {
 			if(user != null){
 				nickName = user.getNickName();
 			}
-			System.out.println(prefix() + nickName + uid + "（神秘人）:上线了");					
+			System.out.println(prefix() + nickName +"-"+ uid + "（神秘人）:上线了");					
 		}
 	}
 	
@@ -285,7 +283,7 @@ public class MyRunnable implements Runnable {
 				if(user != null){
 					nickName = user.getNickName();
 				}
-				System.err.println( prefix() + nickName + uid + (userLog.isHide() ? "(神秘人)" : "") + ":下线了");
+				System.err.println( prefix() + nickName +"-"+ uid + (userLog.isHide() ? "(神秘人)" : "") + ":下线了");
 		}
 		
 		// FIXME
