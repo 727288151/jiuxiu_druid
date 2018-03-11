@@ -10,10 +10,4 @@ public class DemoController {
 	public String hello(){
 		return "hello spring boot";
 	}
-
-	@RequestMapping("/hi")
-	//@ResponseBody
-	public String hi(){
-		return "hi";
-	}
 }
