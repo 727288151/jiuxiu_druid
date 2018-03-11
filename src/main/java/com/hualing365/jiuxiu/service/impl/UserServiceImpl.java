@@ -30,5 +30,15 @@ public class UserServiceImpl implements IUserService {
 	public void addUser(User user) {
 		userMapper.addUser(user);
 	}
+	
+	@Override
+	public void updateUser(User user) {
+		userMapper.updateUser(user);
+	}
+	
+	@Override
+	public void addUserHistory(User user) {
+		userMapper.addUserHistory(user);
+	}
 
 }

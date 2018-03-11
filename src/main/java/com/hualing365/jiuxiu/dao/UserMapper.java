@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import com.hualing365.jiuxiu.entity.User;
@@ -26,4 +27,10 @@ public interface UserMapper {
 	
 	@Insert("insert into t_user(uid, accountid, nickname, headimage, familybadge, datetime) values(#{uid}, #{accountId}, #{nickName}, #{headImage}, #{familyBadge}, #{dateTime})")
 	public void addUser(User user);
+	
+	@Update("update t_user set nickname=#{nickName}, headimage=#{headImage}, familybadge=#{familyBadge}, datetime=#{dateTime} where uid=#{uid}")
+	public void updateUser(User user);
+	
+	@Insert("insert into t_user_history(uid, accountid, nickname, headimage, familybadge, datetime) values(#{uid}, #{accountId}, #{nickName}, #{headImage}, #{familyBadge}, #{dateTime})")
+	public void addUserHistory(User user);
 }

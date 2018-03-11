@@ -47,7 +47,7 @@ public class CommonUtil {
 	    Long hour = (ms - day * dd) / hh;  
 	    Long minute = (ms - day * dd - hour * hh) / mi;  
 	    Long second = (ms - day * dd - hour * hh - minute * mi) / ss;  
-	    Long milliSecond = ms - day * dd - hour * hh - minute * mi - second * ss;  
+	    //Long milliSecond = ms - day * dd - hour * hh - minute * mi - second * ss;  
 	      
 	    StringBuffer sb = new StringBuffer();  
 	    if(day > 0) {  

@@ -22,4 +22,16 @@ public interface IUserService {
 	 */
 	public void addUser(User user);
 	
+	/**
+	 * 修改用户
+	 * @param user
+	 */
+	public void updateUser(User user);
+	
+	/**
+	 * 添加用户历史记录
+	 * @param user
+	 */
+	public void addUserHistory(User user);
+	
 }

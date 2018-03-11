@@ -209,7 +209,16 @@ public class MyRunnable implements Runnable {
 		}
 		//如果已存在，比较是否修改了昵称，头像，家族等，如果修改了，更改用户表，并把之前的放入历史表user_history
 		else{
-			
+			if(!user.getNickName().equals(nickName)){
+				userService.addUserHistory(user);
+				user = new User();
+				user.setUid(uid);
+				user.setNickName(nickName);
+				user.setHeadImage(headImage);
+				user.setFamilyBadge(familyBadge);
+				user.setDateTime(dateTime);
+				userService.updateUser(user);
+			}
 		}
 		
 		//插入用户出入日志表
