@@ -236,6 +236,7 @@ public class MyRunnable implements Runnable {
 		for(int uid : hideMan){
 			//插入用户出入日志表
 			UserLog userLog = new UserLog();
+			userLog.setRoomId(roomId);
 			userLog.setUid(uid);
 			userLog.setWealthLevel(0);
 			userLog.setWealthLevelDesc(null);
