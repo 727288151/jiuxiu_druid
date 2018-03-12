@@ -12,5 +12,5 @@ public class Config {
 
 	public static String TOKEN = "hualing365_com";
 	
-	public static String EncodingAESKey = "";
+	public static String EncodingAESKey = "xL5VZdd0yP9hSSEgmQ9AMuNGKirS7xXKLWuk3oQyiAX";
 }
