@@ -35,6 +35,6 @@ public interface UserLogMapper {
 	@ResultType(User.class)
 	public List<UserLog> queryAllUserOnline(int roomId);
 	
-	@Update("update t_user_log set logoutdatetime = #{logoutDateTime}, duration = #{duration}, online=0 where roomId=#{roomId} and uid=#{uid}")
+	@Update("update t_user_log set logoutdatetime = #{logoutDateTime}, duration = #{duration}, online=0 where id=#{id}")
 	public void offline(UserLog userLog);
 }
