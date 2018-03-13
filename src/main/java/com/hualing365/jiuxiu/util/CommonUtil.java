@@ -81,6 +81,9 @@ public class CommonUtil {
 	 */
 	public static String getWealthLevelDesc(int wealthLevel){
 		String weathLevelDesc = "";
+		if(wealthLevel == 0){
+			return "布衣";
+		}
 		if(wealthLevel <= 10){
 			weathLevelDesc = "富";
 		}else{

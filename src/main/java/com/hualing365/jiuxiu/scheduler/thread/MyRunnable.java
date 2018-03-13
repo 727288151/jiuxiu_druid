@@ -139,7 +139,6 @@ public class MyRunnable implements Runnable {
 				String familyBadge = userObj.getString("familyBadge");
 				int os = userObj.getIntValue("os");
 				insert(uid, accountId, nickName, wealthlevel, headImage, familyBadge, os, 0);
-				logger.info(prefix() + nickName+"("+uid+") came in!");
 			}
 			//如果uid已包含，则先删除，set中剩余的就是已经下线的
 			else{
@@ -199,6 +198,8 @@ public class MyRunnable implements Runnable {
 	 */
 	public void insert(int uid, int accountId, String nickName, int wealthLevel, String headImage, String familyBadge, int os, int hide){
 		String dateTime = CommonUtil.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss");
+		logger.info(prefix() + nickName+"("+uid+") came in!");
+		
 		//如果用户表不存在，则插入用户
 		User user = userService.queryUserById(uid);
 		if(user == null){
@@ -292,11 +293,11 @@ public class MyRunnable implements Runnable {
 				
 				//查询用户表
 				User user = userService.queryUserById(uid);
-				String nickName = "null";
+				String nickName = "";
 				if(user != null){
 					nickName = user.getNickName();
 				}
-				logger.info(prefix() + "--------" + nickName +"-("+ uid + (userLog.isHide() ? ")[hidden]" : ")") + " went out!");
+				logger.info(prefix() + "----------------" + nickName +"("+ uid + (userLog.isHide() ? ")[hidden]" : ")") + " went out!");
 		}
 		
 		// FIXME
@@ -322,7 +323,7 @@ public class MyRunnable implements Runnable {
 	 * @return
 	 */
 	public String prefix(){
-		return "Room"+roomId+"["+roomName + "]--";
+		return "[" + roomId +"]["+roomName + "]"+ "--";
 	}
 
 	public void setActive(boolean isActive){
