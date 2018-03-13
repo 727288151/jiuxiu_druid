@@ -54,7 +54,7 @@ public class MyRunnable implements Runnable {
 
 	@Override
 	public void run() {
-		logger.info("Room["+roomName+"]"+roomId+"--started!");
+		logger.info(prefix() + "started!");
 		while(true){
 			try{
 				URL url = new URL(urlStr + "&v=" + System.currentTimeMillis());
@@ -73,7 +73,7 @@ public class MyRunnable implements Runnable {
 				
 				//如果isActive是false，则终止线程
 				if(!isActive){
-					logger.info("Room["+roomName+"]"+roomId+"--stopped!");
+					logger.info(prefix() + "stopped!");
 					return;
 				}
 			}catch (IOException e){
@@ -296,7 +296,7 @@ public class MyRunnable implements Runnable {
 				if(user != null){
 					nickName = user.getNickName();
 				}
-				logger.info( prefix() + nickName +"-("+ uid + (userLog.isHide() ? ")[hidden]" : ")") + " went out!");
+				logger.info(prefix() + "--------" + nickName +"-("+ uid + (userLog.isHide() ? ")[hidden]" : ")") + " went out!");
 		}
 		
 		// FIXME
@@ -322,7 +322,7 @@ public class MyRunnable implements Runnable {
 	 * @return
 	 */
 	public String prefix(){
-		return roomName + ": ";
+		return "Room"+roomId+"["+roomName + "]--";
 	}
 
 	public void setActive(boolean isActive){
