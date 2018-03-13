@@ -7,8 +7,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +28,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.hualing365.jiuxiu.entity.UserLog;
+import com.hualing365.jiuxiu.service.IUserLogService;
 import com.hualing365.jiuxiu.wx.SignUtil;
 
 /**
@@ -36,6 +41,9 @@ import com.hualing365.jiuxiu.wx.SignUtil;
 public class WxController {
 	
 	final Logger logger = LoggerFactory.getLogger(WxController.class);
+	
+	@Autowired
+	IUserLogService userLogService;
 
 	@GetMapping("/wx")
 	public String doGet(String signature, String timestamp, String nonce, String echostr){
@@ -55,33 +63,56 @@ public class WxController {
 	
 	@PostMapping("/wx")
 	public String doPost(HttpServletRequest request){
+		StringBuilder result = new StringBuilder();
+		String fromUserName = null;
+		String toUserName = null;
 		try {
 			//String data = readStream(request.getInputStream());
 			
 			Map<String, String> map = parseXml(request.getInputStream());
 			String msgType = map.get("MsgType");
 			if("text".equals(msgType)){
-				String fromUserName = map.get("FromUserName");
-				String toUserName = map.get("ToUserName");
+				fromUserName = map.get("FromUserName");
+				toUserName = map.get("ToUserName");
 				String content = map.get("Content");
-				String sRespData = "<xml><ToUserName><![CDATA["+fromUserName+"]]></ToUserName>"+
-						"<FromUserName><![CDATA["+toUserName+"]]></FromUserName>"+
-						"<CreateTime>"+new Date().getTime()+"</CreateTime>"+
-						"<MsgType><![CDATA[text]]></MsgType>"+
-						"<Content><![CDATA["+content+"]]></Content>"+
-						"<MsgId></MsgId>"+
-						"<AgentID>2</AgentID></xml>";
-				logger.info("resp:"+sRespData);
-				System.out.println("resp:"+sRespData);
-				return sRespData;
+				String[] arr = content.split("-");
+				List<UserLog> userLogList = new ArrayList<UserLog>();
+				try{
+					if(arr.length == 2){
+						userLogList = userLogService.queryUserLog(Integer.valueOf(arr[0]), Integer.valueOf(arr[1]));
+					}
+					else if(arr.length == 3){
+						userLogList = userLogService.queryUserLog(Integer.valueOf(arr[0]), Integer.valueOf(arr[1]), Integer.valueOf(arr[2]));
+					}
+				}catch(Exception e){
+					//ignore
+				}
+				for(int i=userLogList.size()-1; i>=0; i--){
+					UserLog ul = userLogList.get(i);
+					result.append(ul.getNickName()).append(":")
+						.append(ul.getLoginDateTime()).append("-")
+						.append(ul.getLogoutDateTime()).append("\n");
+				}
 			}
-			return msgType;
+			if(result.length()==0){
+				result.append(msgType);
+			}
 		} catch (IOException e) {
 			//e.printStackTrace();
+			//System.err.println(e.getMessage());
 			logger.error(e.getMessage());
-			System.err.println(e.getMessage());
-			return "Error:"+e.getMessage();
+			result.append("Error:").append(e.getMessage());
 		}
+
+		String respData = "<xml><ToUserName><![CDATA["+fromUserName+"]]></ToUserName>"+
+				"<FromUserName><![CDATA["+toUserName+"]]></FromUserName>"+
+				"<CreateTime>"+new Date().getTime()+"</CreateTime>"+
+				"<MsgType><![CDATA[text]]></MsgType>"+
+				"<Content><![CDATA["+result.toString()+"]]></Content>"+
+				"<MsgId></MsgId>"+
+				"<AgentID>2</AgentID></xml>";
+		logger.info("resp:"+respData);
+		return respData;
 	}
 	
 	

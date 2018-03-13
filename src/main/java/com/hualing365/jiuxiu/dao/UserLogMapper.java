@@ -37,4 +37,10 @@ public interface UserLogMapper {
 	
 	@Update("update t_user_log set logoutdatetime = #{logoutDateTime}, duration = #{duration}, online=0 where id=#{id}")
 	public void offline(UserLog userLog);
+	
+	@Select("select u.nickname,ul.* from t_user_log ul left join t_user u on u.uid=ul.uid where ul.roomid=#{roomId} and ul.uid=#{uid} order by id desc limit 0,#{count}")
+	public List<UserLog> queryUserLogWithUID(@Param("roomId") int roomId,@Param("uid") int uid,@Param("count") int count);
+	
+	@Select("select u.nickname,ul.* from t_user_log ul left join t_user u on u.uid=ul.uid where ul.roomid=#{roomId} order by id desc limit 0,#{count}")
+	public List<UserLog> queryUserLogWithoutUID(@Param("roomId") int roomId, @Param("count") int count);
 }

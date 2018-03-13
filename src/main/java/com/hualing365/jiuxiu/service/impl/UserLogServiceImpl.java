@@ -42,4 +42,14 @@ public class UserLogServiceImpl implements IUserLogService {
 	public void offline(UserLog userLog) {
 		userLogMapper.offline(userLog);
 	}
+	
+	@Override
+	public List<UserLog> queryUserLog(int roomId, int uid, int count) {
+		return userLogMapper.queryUserLogWithUID(roomId, uid, count);
+	}
+	
+	@Override
+	public List<UserLog> queryUserLog(int roomId, int count) {
+		return userLogMapper.queryUserLogWithoutUID(roomId, count);
+	}
 }

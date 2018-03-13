@@ -26,6 +26,11 @@ public class UserLog {
 	int uid;
 	
 	/**
+	 * 用户昵称
+	 */
+	String nickName;
+	
+	/**
 	 * 等级
 	 */
 	int wealthLevel;
@@ -89,6 +94,14 @@ public class UserLog {
 
 	public void setUid(int uid) {
 		this.uid = uid;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public int getWealthLevel() {

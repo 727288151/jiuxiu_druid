@@ -40,4 +40,21 @@ public interface IUserLogService {
 	 * @param userLog
 	 */
 	public void offline(UserLog userLog);
+	
+	/**
+	 * 查询用户日志
+	 * @param roomId
+	 * @param uid
+	 * @param count
+	 * @return
+	 */
+	public List<UserLog> queryUserLog(int roomId, int uid, int count);
+	
+	/**
+	 * 查询用户日志
+	 * @param roomId
+	 * @param count
+	 * @return
+	 */
+	public List<UserLog> queryUserLog(int roomId, int count);
 }
