@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -30,6 +32,8 @@ import com.hualing365.jiuxiu.util.CommonUtil;
 @Scope("prototype")
 @Component
 public class MyRunnable implements Runnable {
+	
+	final Logger logger = LoggerFactory.getLogger(MyRunnable.class);
 	
 	@Autowired
 	IUserService userService;
@@ -50,7 +54,7 @@ public class MyRunnable implements Runnable {
 
 	@Override
 	public void run() {
-		System.out.println(roomName+roomId+"--start");
+		logger.info("Room["+roomName+"]"+roomId+"--started!");
 		while(true){
 			try{
 				URL url = new URL(urlStr + "&v=" + System.currentTimeMillis());
@@ -64,22 +68,22 @@ public class MyRunnable implements Runnable {
 				}
 				bis.close();
 				is.close();
-				//System.out.println(s);
+				logger.debug("receive json:"+s.toString());
 				handle(s.toString().trim());
 				
 				//如果isActive是false，则终止线程
 				if(!isActive){
-					System.out.println(roomName+roomId+"--stop");
+					logger.info("Room["+roomName+"]"+roomId+"--stopped!");
 					return;
 				}
 			}catch (IOException e){
 				//e.printStackTrace();
-				System.err.println(e.getMessage());
+				logger.error(e.getMessage());
 			}
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				System.err.println(e.getMessage());
+				logger.error(e.getMessage());
 			}
 		}
 	}
@@ -88,7 +92,7 @@ public class MyRunnable implements Runnable {
 		JSONObject jsonObj = JSONObject.parseObject(str);
 		//如果返回结果不正常，则退出不进行下一步操作
 		if(jsonObj.getIntValue("code") != 200){
-			System.out.println("Stoped! RoomId is wrong-"+roomName + "("+roomId+")");
+			logger.error("Stoped! RoomId is wrong-"+roomName + "("+roomId+")");
 			setActive(false);
 			return ;
 		}
@@ -135,7 +139,7 @@ public class MyRunnable implements Runnable {
 				String familyBadge = userObj.getString("familyBadge");
 				int os = userObj.getIntValue("os");
 				insert(uid, accountId, nickName, wealthlevel, headImage, familyBadge, os, 0);
-				System.out.println(prefix() + nickName+"-"+uid+":上线了");
+				logger.info(prefix() + nickName+"("+uid+") came in!");
 			}
 			//如果uid已包含，则先删除，set中剩余的就是已经下线的
 			else{
@@ -259,7 +263,7 @@ public class MyRunnable implements Runnable {
 			if(user != null){
 				nickName = user.getNickName();
 			}
-			System.out.println(prefix() + nickName +"-"+ uid + "（神秘人）:上线了");					
+			logger.info(prefix() + nickName +"("+ uid + ")[hidden] came in!");					
 		}
 	}
 	
@@ -288,11 +292,11 @@ public class MyRunnable implements Runnable {
 				
 				//查询用户表
 				User user = userService.queryUserById(uid);
-				String nickName = "";
+				String nickName = "null";
 				if(user != null){
 					nickName = user.getNickName();
 				}
-				System.err.println( prefix() + nickName +"-"+ uid + (userLog.isHide() ? "(神秘人)" : "") + ":下线了");
+				logger.info( prefix() + nickName +"-("+ uid + (userLog.isHide() ? ")[hidden]" : ")") + " went out!");
 		}
 		
 		// FIXME
@@ -318,9 +322,7 @@ public class MyRunnable implements Runnable {
 	 * @return
 	 */
 	public String prefix(){
-		Date current = new Date();
-		String currentDateTime = sdf.format(current);
-		return roomName + Thread.currentThread().getName() + "-" + currentDateTime + "-";
+		return roomName + ": ";
 	}
 
 	public void setActive(boolean isActive){
