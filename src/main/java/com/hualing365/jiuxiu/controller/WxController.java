@@ -78,10 +78,15 @@ public class WxController {
 				String[] arr = content.split("-");
 				List<UserLog> userLogList = new ArrayList<UserLog>();
 				try{
-					if(arr.length == 2){
+					if(arr.length == 1) {
+						userLogList = userLogService.queryAllUserOnline(Integer.valueOf(arr[0]));
+						
+					} else if(arr.length == 2){
+						
 						userLogList = userLogService.queryUserLog(Integer.valueOf(arr[0]), Integer.valueOf(arr[1]));
-					}
-					else if(arr.length == 3){
+					
+					} else if(arr.length == 3){
+						
 						userLogList = userLogService.queryUserLog(Integer.valueOf(arr[0]), Integer.valueOf(arr[1]), Integer.valueOf(arr[2]));
 					}
 				}catch(Exception e){

@@ -31,7 +31,7 @@ public interface UserLogMapper {
 	@Select("select * from t_user_log where roomid = #{roomId} and uid = #{uid} order by id desc limit 0,1")
 	public UserLog queryLatestUserLog(@Param("roomId") int roomId, @Param("uid") int uid);
 
-	@Select("select * from t_user_log where online=1 and roomid = #{roomId}")
+	@Select("select u.nickname,ul.* from t_user_log ul left join t_user u on u.uid=ul.uid where ul.online=1 and ul.roomid = #{roomId}")
 	@ResultType(User.class)
 	public List<UserLog> queryAllUserOnline(int roomId);
 	
