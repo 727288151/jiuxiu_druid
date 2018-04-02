@@ -81,6 +81,7 @@ public class AsyncScanRoomTask {
 	public Set<Integer> getActiveRooms(){
 		Set<Integer> set = new HashSet<Integer>();
 		List<Room> roomList = roomService.queryAllActiveRooms();
+		System.out.println("Active:"+roomList.size());
 		for(Room room : roomList){
 			set.add(room.getRoomId());
 			roomNameMap.put(room.getRoomId(), room.getRoomName());
